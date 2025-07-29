@@ -1,17 +1,28 @@
 # -*- mode: python ; coding: utf-8 -*-
 
-
 block_cipher = None
 
-
 a = Analysis(
-    ['script/chameleon_cli_main.py'],
-    pathex=[],
+    ['/script/chameleon_cli_main.py'],
+    pathex=['/script'],
     binaries=[
-        ("script/bin/*", "bin/"),
+        # Include compiled binaries from the correct location
+        ("software/bin/*", "bin/"),
+        # Alternative paths depending on your build configuration
+        # ("software/bin/Debug/*", "bin/"),
+        # ("software/bin/Release/*", "bin/"),
     ],
-    datas=[],
-    hiddenimports=[],
+    datas=[
+        # Include any data files if needed
+        # ("software/script/data/*", "data/"),
+    ],
+    hiddenimports=[
+        # Add any hidden imports that PyInstaller might miss
+        'serial',
+        'serial.tools',
+        'serial.tools.list_ports',
+        # Add other imports from requirements.txt as needed
+    ],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
@@ -21,6 +32,7 @@ a = Analysis(
     cipher=block_cipher,
     noarchive=False,
 )
+
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
 exe = EXE(
@@ -30,7 +42,7 @@ exe = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name='chameleon_cli_main',
+    name='chameleon_cli',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -43,4 +55,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon=None  # Add path to icon file if you have one
 )
